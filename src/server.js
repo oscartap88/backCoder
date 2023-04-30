@@ -1,13 +1,13 @@
 import express from 'express';
-import ProductManager from './manager/product.manager.js';
-import ProductManager from './manager/product.manager.js';
+import ProductsManagers from './manager/product.manager.js';
 
-const app = expres ();
+
+const app = express ();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 
-const productManager = new ProductManager('./products.json');
+const productManager = new ProductsManagers('./products.json');
 
 app.get('/products', async(req, res)=>{
     try {

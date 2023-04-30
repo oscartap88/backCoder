@@ -1,7 +1,8 @@
 import fs from 'fs';
-import ProductManager from './manager/product.manager.js';
 
-export default class ProductManager{
+
+
+export default class ProductsManagers{
     constructor(path){
         this.path = path;
     }
