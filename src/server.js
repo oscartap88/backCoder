@@ -1,17 +1,17 @@
 import express from 'express';
+import morgan from 'morgan';
 import productsRouter from './routers/products.router.js';
 import cartsRouter from './routers/carts.router.js';
-import { dirname } from 'path';
-import { fileURLToPath } from 'url';
+import { __dirname } from './path.js';
 
-const __dirname = dirname (fileURLToPath(import.meta.url));
 
 
 const app = express ();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
-app.use(express.static(__dirname + 'public'));
+app.use(express.static(__dirname + '/public'));
+app.use(morgan('dev'));
 
 
 app.use('/api/products', productsRouter);

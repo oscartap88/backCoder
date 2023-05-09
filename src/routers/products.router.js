@@ -1,5 +1,7 @@
 import { Router } from "express";
 import ProductsManagers from '../manager/product.manager.js';
+import { productValidator } from "../middlewares/producValidator.js";
+//import { uploader } from "../middlewares/multer.js";
 const productManager = new ProductsManagers('./products.json');
 const router = Router();
 
@@ -14,14 +16,14 @@ router.get('/', async(req, res)=>{
         res.status(404).json({message: error.message});
         console.log(error);
     }
-})
+});
 
-router.get('/', async (req, res) =>{
+router.get('/:id', async (req, res) =>{
     try {
-        const {id} = req.query;
+        const {id} = req.params;
         const product = await productManager.getProductById(Number(id));
         if(product){
-            res.status(200).jsn({message: 'product found', product})
+            res.status(200).json({message: 'product found', product})
         } else {
             res.status(400).send('product not found')
         }
@@ -31,16 +33,29 @@ router.get('/', async (req, res) =>{
     }
 });
 
-router.post('/', async (req, res) =>{
+router.post('/',productValidator, async (req, res) =>{
     try {
+        console.log(req.body);
         const product = req.body;
         const newProduct = await productManager.createProduct(product);
         res.json(newProduct)
     } catch (error) {
-        
+        res.status(404).json({message: error.message});
     }
 })
-
+//
+//router.post('/test-multer', uploader.single('photo') , async (req, res) =>{
+//    try {
+//        console.log(req.file);
+//        const product = req.body; 
+//        product.photo = req.file.path;
+//        const newProduct = await productManager.createProduct(product);
+//        res.json(newProduct)
+//    } catch (error) {
+//        res.status(404).json({message: error.message});
+//    }
+//})
+//
 router.put('/:id', async(req, res) =>{
     try {
         const product = req.body;
@@ -57,7 +72,7 @@ router.put('/:id', async(req, res) =>{
     }
 })
 
-router.delete('/id:', async(req, res) => {
+router.delete('/:id', async(req, res) => {
     try {
         const { id } = req.params;
         const products = await productManager.getAllProducts();
