@@ -3,7 +3,7 @@ const router = Router ();
 
 
 router.get('/', (req, res) => {
-    res.render('home')
+    res.render('realTimeProducts')
 });
 
 export default router
