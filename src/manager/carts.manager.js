@@ -10,8 +10,8 @@ export default class CartsManagers{
     async #getMaxId(){
         let maxId = 0;
         const carts = await this.getAllCarts();
-        carts.map((prod) => {
-            if(prod.id > maxId) maxId = prod.id;
+        carts.map((car) => {
+            if(car.id > maxId) maxId = car.id;
         });
         return maxId;
     }
@@ -31,7 +31,7 @@ export default class CartsManagers{
     async getCartById(id){
         try {
             const carts = await this.getAllCarts();
-            const cart = carts.find((prod) => prod.id === id);
+            const cart = carts.find((car) => car.id === id);
             if(cart) {
                 return cart
             }

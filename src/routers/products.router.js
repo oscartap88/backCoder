@@ -2,7 +2,8 @@ import { Router } from "express";
 import ProductsManagers from '../manager/product.manager.js';
 import { productValidator } from "../middlewares/producValidator.js";
 //import { uploader } from "../middlewares/multer.js";
-const productManager = new ProductsManagers('./products.json');
+import { __dirname } from "../path.js";
+const productManager = new ProductsManagers( __dirname + '/db/products.json');
 const router = Router();
 
 
@@ -12,9 +13,11 @@ router.get('/', async(req, res)=>{
     try {
         const products = await productManager.getAllProducts();
             res.status(200).json(products);
-    } catch (error) {
-        res.status(404).json({message: error.message});
-        console.log(error);
+            res.send(products);
+    }
+     catch (error) {
+//        res.status(404).json({message: error.message});
+       console.log(error);
     }
 });
 
