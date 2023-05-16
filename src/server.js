@@ -46,7 +46,7 @@ socketServer.on('connection', (socket) =>{
 
     socket.on('newProduct', async(obj) =>{
         await productManager.createProduct(obj);
-        socketServer.emit('products', await productManager.getAllProducts());
+        socketServer.emit('arrayProducts', await productManager.getAllProducts());
     });
 
 
