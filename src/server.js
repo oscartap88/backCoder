@@ -1,92 +1,68 @@
 import express from 'express';
-import ProductManager from './manager/product.manager.js';
-import ProductManager from './manager/product.manager.js';
+import morgan from 'morgan';
+import { errorHandler } from './middlewares/errorHandler.js';
+import './db/db.js';
+import productsRouter from './routers/product.router.js';
+import messagesRouter from './routers/message.router.js';
+//import productsRouter from './routers/products.router.js';
+import cartsRouter from './routers/carts.router.js';
+import { __dirname } from './path.js';
+import handlebars from 'express-handlebars';
+import viewsRouter from './routers/views.router.js';
+import { Server } from 'socket.io';
+import ProductsManagers from './daos/filesystem/product.dao.js';
+const productManager = new ProductsManagers( __dirname + '/db/products.json');
 
-const app = expres ();
+
+const app = express ();
 
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
+app.use(errorHandler);
+app.use(express.static(__dirname + '/public'));
+app.use(morgan('dev'));
+app.engine('handlebars', handlebars.engine());
+app.set('view engine', 'handlebars');
+app.set('views', __dirname + '/views');
 
-const productManager = new ProductManager('./products.json');
+app.use('/realtimeproducts' , viewsRouter);
 
-app.get('/products', async(req, res)=>{
-    try {
-        const products = await productManager.getAllProducts();
-            res.status(200).json(products);
-    } catch (error) {
-        res.status(404).json({message: error.message});
-        console.log(error);
-    }
-})
+app.use('/api/products', productsRouter);
+app.use('/api/carts', cartsRouter);
 
-app.get('/products/', async (req, res) =>{
-    try {
-        const {id} = req.query;
-        const product = await productManager.getProductById(Number(id));
-        if(product){
-            res.status(200).jsn({message: 'product found', product})
-        } else {
-            res.status(400).send('product not found')
-        }
-        
-    } catch (error) {
-        res.status(404).json({message: error.message});
-    }
-});
+app.use('/products', productsRouter);
 
-app.post('/products', async (req, res) =>{
-    try {
-        const product = req.body;
-        const newProduct = await productManager.createProduct(product);
-        res.json(newProduct)
-    } catch (error) {
-        
-    }
-})
+app.use('/messages', messagesRouter);
 
-app.put('/products/:id', async(req, res) =>{
-    try {
-        const product = req.body;
-        const { id } = req.params;
-        await productManager.getProductById(Number(id));
-        if(productFile){
-            await productManager.updateProduct(product, Number(id));
-            res.send(`product updated successfully!`);
-        } else {
-            res.status(404).send('product not found')
-        }
-    } catch (error) {
-        
-    }
-})
+//const httpServer = app.listen(8080, ()=>{
+//    console.log(`server listo en puerto : 8080`);
+//});
+//
+//const socketServer = new Server(httpServer);
+//
+//const arrayProducts = [];
+//
+//socketServer.on('connection', (socket) =>{
+//    console.log('usuario conectado!', socket.id);
+//    socket.on ('disconnect', () =>{
+//        console.log('usuario desconectado!');
+//    });
+//
+//    socketServer.emit('arrayProducts', productManager.getAllProducts() );
+//
+//
+//    socket.on('newProduct', async(obj) =>{
+//        await productManager.createProduct(obj);
+//        socketServer.emit('arrayProducts', await productManager.getAllProducts());
+//    });
+//
+//
+    //socket.on('newProduct', (obj) =>{
+    //    arrayProducts.push(obj);
+    //    socketServer.emit('arrayProducts', arrayProducts);
+    //})
 
-app.delete('products/id:', async(req, res) => {
-    try {
-        const { id } = req.params;
-        const products = await productManager.getAllProducts();
-        if(products.lenght > 0){
-            await productManager.deleteAllProducts(Number(id));
-            res.send(`product id: ${id} deleted seccessfully`);
-        } else {
-            res.send(`product id: ${id} not found`)
-        }
-    } catch (error) {
-        res.status(404).send('product not found')
-    }
-})
-
-app.delete('products/', async(req, res) => {
-    try {
-        await productManager.deleteAllProducts();
-        res.send('products deleted successfully')
-        } 
-     catch (error) {
-        res.status(404).send('product not found')
-    }
-})
+//});
 
 const PORT = 8080;
-
-app.listen(PORT, ()=>{
-    console.log(`server ok en puerto : ${PORT}`);
-});
+app.listen(PORT, ()=> console.log(`Server listo en puerto ${PORT}`));
