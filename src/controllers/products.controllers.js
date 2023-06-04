@@ -2,6 +2,7 @@
 import {
     getAllService,
     getByIdService,
+    getAggregationService,
     createService,
     updateService,
     deleteService,
@@ -13,6 +14,16 @@ export const getAllController = async (req, res, next ) => {
     try {
         const docs = await getAllService();
         res.json(docs);
+        } catch (error) {
+        next(error);
+    }
+}
+
+export const getAggregation1Controller = async (req, res, next ) => {
+    try {
+        const {description} = req.query
+        const response = await getAggregationService(description);
+        res.json(response);
         } catch (error) {
         next(error);
     }

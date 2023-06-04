@@ -10,6 +10,19 @@ export default class ProductsDaoMongoDB {
         }
     }
 
+    async getAggregation1(description){
+        try {
+            const response = await ProductsModel.aggregate([
+                {
+                    $match: { description: `${description}` }
+                }
+            ])
+            return response;
+        } catch (error) {
+           console.log(error);
+        }
+    }
+
     async getProductById(id){
         try {
             const response = await ProductsModel.findById(id);

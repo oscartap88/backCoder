@@ -9,6 +9,16 @@ export const getAllService = async () => {
         console.log(error);
     }
 };
+
+export const getAggregationService = async(description)=> {
+    try {
+        const aggregation = await prodDaoMongo.getAggregation1(description);
+        return aggregation;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getByIdService = async (id) => {
     try {
         const doc = await prodDaoMongo.getProductById(id);
