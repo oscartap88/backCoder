@@ -5,7 +5,7 @@ import {
     createController,
     updateController,
     deleteController
-} from '../controllers/';
+} from '../controllers/carts.controllers.js';
 
 const router = Router();
 

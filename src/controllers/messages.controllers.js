@@ -43,11 +43,11 @@ export const createController = async (req, res, next ) => {
 export const updateController = async (req, res, next ) => {
     try {
         const { id } = req.params;
-        const { name, description, price, stock } = req.body
+        const { name, message } = req.body
         await getAllService(id);
         const docUpd = await updateService(
             id,
-            {name, description, price, stock}
+            {name, message}
         )
         res.json(docUpd);
     } catch (error) {

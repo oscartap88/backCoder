@@ -29,10 +29,11 @@ export const getByIdController = async (req, res, next ) => {
 
 export const createController = async (req, res, next ) => {
     try {
-        const { user, message } = req.body
+        const { name, description, price } = req.body
         const newDoc = await createService({
-            user,
-            message
+            name,
+            description,
+            price
         });
         res.json(newDoc)
     } catch (error) {
@@ -43,11 +44,11 @@ export const createController = async (req, res, next ) => {
 export const updateController = async (req, res, next ) => {
     try {
         const { id } = req.params;
-        const { name, description, price, stock } = req.body
+        const { name, description, price } = req.body
         await getAllService(id);
         const docUpd = await updateService(
             id,
-            {name, description, price, stock}
+            {name, description, price}
         )
         res.json(docUpd);
     } catch (error) {
