@@ -12,8 +12,20 @@ import {
 
 export const getAllController = async (req, res, next ) => {
     try {
-        const docs = await getAllService();
-        res.json(docs);
+        const { page, limit} = req.query;
+        const response = await getAllService( page, limit);
+        //res.json(docs);
+        const nextPage = response.hasNextPage ? `http://localhost:8080/products?page=${response.nextPage}` : null
+        const prevPage = response.hasPrevPage ? `http://localhost:8080/products?page=${response.prevPage}` : null
+        res.json({
+            payload: response.docs,
+            info: {
+                totalPages: response.totalDocs ,
+                pages: response.totalPages,
+                nextPage ,
+                prevPage 
+            }
+        })
         } catch (error) {
         next(error);
     }
