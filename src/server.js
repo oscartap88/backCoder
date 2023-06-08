@@ -29,10 +29,10 @@ app.set('views', __dirname + '/views');
 //app.use('/realtimeproducts' , viewsRouter);
 //
 //app.use('/api/products', productsRouter);
-app.use('/api/carts', cartsRouter);
+//app.use('/api/carts', cartsRouter);
 
 app.use('/products', productsRouter);
-
+app.use('/carts', cartsRouter);
 app.use('/messages', messagesRouter);
 
 //const httpServer = app.listen(8080, ()=>{

@@ -10,6 +10,16 @@ export const getAllService = async (page, limit ) => {
     }
 };
 
+export const getByNameService = async (name) => {
+    try {
+        const item = await prodDaoMongo.getProductByName(name);
+        if (!item) throw new Error ("Product not found");
+        else return item;
+    } catch (error) {
+        console.log(error);
+    }
+};
+
 export const getAggregationService = async(description)=> {
     try {
         const aggregation = await prodDaoMongo.getAggregation1(description);

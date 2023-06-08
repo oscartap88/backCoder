@@ -10,6 +10,19 @@ export default class ProductsDaoMongoDB {
         }
     }
 
+    
+
+    async getProductByName(name){
+        try {
+            const response = await ProductsModel.find({name : name}).explain()
+            return response.executionStats;
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+
+
     async getAggregation1(description){
         try {
             const response = await ProductsModel.aggregate([
@@ -26,12 +39,15 @@ export default class ProductsDaoMongoDB {
     async getProductById(id){
         try {
             const response = await ProductsModel.findById(id);
-            return response;
+            return response.populate('carts');
         } catch (error) {
             console.log(error);
         }
     }
 
+
+    
+  
     async createProduct(obj){
         try {
             const response = await ProductsModel.create(obj);

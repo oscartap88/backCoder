@@ -1,5 +1,5 @@
 import { cartsModel } from "./models/carts.model.js";
-
+import { ProductsModel } from "./models/products.model.js";
 
 export default class CartsDaoMongoDB {
     async getAllCarts(){
@@ -9,7 +9,17 @@ export default class CartsDaoMongoDB {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
+
+    async addCartsToProduct(productId, cartId) {
+        try {
+            const prod = await ProductsModel.findById(productId);
+            prod.carts.push(cartId);
+            prod.save();
+        } catch (error) {
+            console.log(error)
+        }
+    };
 
     async getCartsById(id){
         try {
@@ -18,7 +28,7 @@ export default class CartsDaoMongoDB {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     async createCarts(obj){
         try {
@@ -27,7 +37,7 @@ export default class CartsDaoMongoDB {
         } catch (error) {
             console.log(error);
         }
-    }
+    };
 
     async updateCarts(id, obj){
         try {

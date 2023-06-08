@@ -1,6 +1,7 @@
 import { Router } from "express";
 import {
     getAllController,
+    getByNameController,
     getAggregation1Controller,
     getByIdController,
     createController,
@@ -11,6 +12,7 @@ import {
 const router = Router();
 
 router.get ('/' , getAllController);
+router.get ('/by', getByNameController);
 router.get ('/aggregation1' , getAggregation1Controller);
 router.get('/:id', getByIdController);
 router.post('/', createController);

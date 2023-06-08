@@ -1,6 +1,7 @@
 import {
     getAllService,
     getByIdService,
+    addCartsToService,
     createService,
     updateService,
     deleteService,
@@ -17,11 +18,23 @@ export const getAllController = async (req, res, next ) => {
     }
 }
 
+export const addCartsToController = async (req, res, next) =>{
+    try {
+        const { productId } = req.params;
+        const { cartId } = req.params;
+        const newCart = await addCartsToService (productId,cartId );
+        res.json(newCart);
+    } catch (error) {
+        next(error);
+    }
+}
+
 export const getByIdController = async (req, res, next ) => {
     try {
         const { id } = req.params;
-        const doc = await getByIdService(id);
-        res.json(doc);
+        const cart = await getByIdService(id);
+        if(!cart) throw new Error('Carts not found!')
+        else res.json(cart);
     } catch (error) {
         next(error);
     }
@@ -29,13 +42,12 @@ export const getByIdController = async (req, res, next ) => {
 
 export const createController = async (req, res, next ) => {
     try {
-        const { name, description, price } = req.body
-        const newDoc = await createService({
+        const { name, price } = req.body
+        const newCart = await createService({
             name,
-            description,
             price
         });
-        res.json(newDoc)
+        res.json(newCart);
     } catch (error) {
         next(error);
     }
@@ -44,13 +56,13 @@ export const createController = async (req, res, next ) => {
 export const updateController = async (req, res, next ) => {
     try {
         const { id } = req.params;
-        const { name, description, price } = req.body
+        const { name, price } = req.body
         await getAllService(id);
-        const docUpd = await updateService(
+        const cartUpd = await updateService(
             id,
-            {name, description, price}
+            {name, price}
         )
-        res.json(docUpd);
+        res.json(cartUpd);
     } catch (error) {
         next(error);
     }
