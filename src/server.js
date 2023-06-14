@@ -5,18 +5,43 @@ import './db/db.js';
 import productsRouter from './routers/product.router.js';
 import messagesRouter from './routers/message.router.js';
 import  cartsRouter from './routers/cart.router.js';
+import cookieParser from 'cookie-parser';
 //import productsRouter from './routers/products.router.js';
 //import cartsRouter from './routers/carts.router.js';
 import { __dirname } from './path.js';
 import handlebars from 'express-handlebars';
 import viewsRouter from './routers/views.router.js';
+import usersRouter from './routers/user.router.js';
 import { Server } from 'socket.io';
+import MongoStore from 'connect-mongo';
 import ProductsManagers from './daos/filesystem/product.dao.js';
+import session from 'express-session';
 const productManager = new ProductsManagers( __dirname + '/db/products.json');
 
 
 const app = express ();
 
+const storeOptions = {
+    store: MongoStore.create({
+        mongoUrl: 'mongodb+srv://ogongora:ogongora@cluster0.0f9z6sd.mongodb.net/ecommerce?retryWrites=true&w=majority',
+        //crypto: {
+        //    secret: '1234'
+        //}
+        ttl: 60
+    }),
+    secret: '12345',
+    resave: false,
+    saveUninitialized: true,
+    cookie:{ 
+        maxAge: 60000 
+    }
+}
+
+//const secret = '123456';
+
+
+app.use(session(storeOptions));
+app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(errorHandler);
@@ -31,9 +56,14 @@ app.set('views', __dirname + '/views');
 //app.use('/api/products', productsRouter);
 //app.use('/api/carts', cartsRouter);
 
+app.use('/views' , viewsRouter);
+app.use('/users', usersRouter);
+
 app.use('/products', productsRouter);
 app.use('/carts', cartsRouter);
 app.use('/messages', messagesRouter);
+
+
 
 //const httpServer = app.listen(8080, ()=>{
 //    console.log(`server listo en puerto : 8080`);
