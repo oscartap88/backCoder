@@ -1,10 +1,13 @@
 import { Router } from "express";
 import UserDaoDB from "../daos/mongodb/user.dao.js";
+import passport from "passport";
+import { registerResponse, loginResponse, githubResponse} from "../controllers/user.controllers.js";
+import { frontResponse } from "../passport/strategies.js";
 const UserDao = new UserDaoDB()
 
-const router = Router ();
+const router = Router ()
 
-router.post('/register', async (req, res) =>{
+router.post('/register',passport.authenticate('register'), registerResponse, async (req, res) =>{
     try {
         const newUser = await UserDao.createUser(req.body)
         if(newUser){
@@ -12,14 +15,13 @@ router.post('/register', async (req, res) =>{
         } else{
             res.redirect('/views/error-register')
         }
-        return newUser
     } catch (error) {
        console.log(error); 
     }
 });
 
 
-router.post('/login', async (req, res) => {
+router.post('/login',passport.authenticate('login') , loginResponse, async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await UserDao.loginUser(req.body);
@@ -34,5 +36,9 @@ router.post('/login', async (req, res) => {
       console.log(error);
     }
 })
+
+router.get('/register-github', passport.authenticate('github', { scope: ['user:email']}));
+
+router.get('/profile-github', passport.authenticate('github', { scope: ['user:email']}), githubResponse);
 
 export default router;

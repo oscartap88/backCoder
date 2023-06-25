@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 
 const userSchema = new mongoose.Schema({
-    first_name: {
+    name: {
       type: String,
       required: true,
     },
@@ -22,6 +22,11 @@ const userSchema = new mongoose.Schema({
     role: {
       type: String,
       default: 'user'
+    },
+    isGithub: {
+      type: Boolean,
+      required: true,
+      default: false
     }
   })
 
