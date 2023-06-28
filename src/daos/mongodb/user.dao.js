@@ -4,7 +4,7 @@ import { createHash, isValidPassword } from '../../path.js';
 export default class UserDao {
     async createUser(user) {
       try {
-        const { name, last_name, email, password } = user;
+        const {  email, password } = user;
         const existUser = await userModel.find({email});
         if(existUser.length === 0){
           if(email === 'adminCoder@coder.com' && password === 'adminCoder123'){
@@ -15,11 +15,11 @@ export default class UserDao {
             return newUser
           }
         } else {
-          return null;
+          return false;
         }
       } catch (error) {
         console.log(error)
-        throw new Error(error)
+        //throw new Error(error)
       }
     }
     
@@ -27,7 +27,7 @@ export default class UserDao {
     async loginUser(user) {
         try {
             const { email, password } = user;
-            const userExist = await userModel.findOne({email});
+            const userExist = await userModel.findOne(email);
             if (userExist){
               const passValid = isValidPassword( userExist, password);
               if(!passValid) return false
@@ -58,7 +58,7 @@ async getByEmail(email){
     } return false
   } catch (error) {
     console.log(error)
-    throw new Error(error)
+    //throw new Error(error)
   }
 }
 

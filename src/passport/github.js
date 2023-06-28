@@ -1,4 +1,4 @@
-import { Strategy as GithubStrategy }   from "passport-local";
+import { Strategy as GithubStrategy }   from "passport-github2";
 import passport from "passport";
 import UserDao from "../daos/mongodb/user.dao.js";
 const userDao = new UserDao();
@@ -11,15 +11,15 @@ const strategyOptions = {
 
 const registerOrLogin = async(accessToken, refreshToken, profile, done) => {
     console.log('profile:::', profile);
-    const email = profile._json.email !== null ? profile._json : profile._json.blog;
+    const email = profile._json.email 
     const user = await userDao.getByEmail(email);
     if(user) return done(null, user);
     const newUser = await userDao.createUser({
         name: profile._json.name.split(' ')[0],
         last_name: profile._json.name.split(' ')[1],
-        email,
+        email: email,
         password: ' ',
-        isGithub: tue
+        isGithub: true
     });
     return done (null, newUser);
 }
