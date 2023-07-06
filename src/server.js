@@ -18,6 +18,8 @@ import ProductsManagers from './daos/filesystem/product.dao.js';
 import session from 'express-session';
 import passport from 'passport';
 import './passport/github.js';
+import dotenv from 'dotenv';
+dotenv.config();
 const productManager = new ProductsManagers( __dirname + '/db/products.json');
 
 
@@ -99,5 +101,5 @@ app.use('/messages', messagesRouter);
 
 //});
 
-const PORT = 8080;
+const PORT = process.env.PORT || 8080;
 app.listen(PORT, ()=> console.log(`Server listo en puerto ${PORT}`));

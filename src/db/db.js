@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
+import dotenv from 'dotenv';
+dotenv.config();
 
-const connectionString = 'mongodb+srv://ogongora:ogongora@cluster0.0f9z6sd.mongodb.net/ecommerce?retryWrites=true&w=majority';
+const connectionString = process.env.MONGO_ATLAS_URL;
 
 
     try {

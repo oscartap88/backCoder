@@ -7,7 +7,7 @@ import {
     createService,
     updateService,
     deleteService,
-} from "../services/products.services.js"
+} from "../services/class.services.js"
 
 
 

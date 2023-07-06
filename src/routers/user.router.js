@@ -2,6 +2,7 @@ import { Router } from "express";
 import UserDaoDB from "../daos/mongodb/user.dao.js";
 import passport from "passport";
 import { registerResponse, loginResponse, githubResponse} from "../controllers/user.controllers.js";
+import { checkAuth } from "../jwt/auth.js";
 import { frontResponse } from "../passport/strategies.js";
 const UserDao = new UserDaoDB()
 
@@ -37,6 +38,19 @@ router.post('/login',passport.authenticate('login') , loginResponse, async (req,
     }
 })
 
+//router.get('/private', checkAuth, (req, res)=>{
+//    const { name, last_name, email, role } = req.user;
+//    res.json({
+//      status: 'success',
+//      userData: {
+//        name, 
+//        last_name, 
+//        email, 
+//        role
+//      }
+//    })
+//  })
+//
 router.get('/register-github', passport.authenticate('github', { scope: ['user:email']}));
 
 router.get('/profile-github', passport.authenticate('github', { scope: ['user:email']}), githubResponse);
