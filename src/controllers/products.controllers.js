@@ -2,11 +2,12 @@
 import {
     getAllService,
     getByIdService,
+    getByNameService,
     getAggregationService,
     createService,
     updateService,
     deleteService,
-} from "../services/products.services.js"
+} from "../services/class.services.js"
 
 
 
@@ -29,7 +30,21 @@ export const getAllController = async (req, res, next ) => {
         } catch (error) {
         next(error);
     }
-}
+};
+
+export const getByNameController = async (req, res, next) => {
+    try {
+        const {name} = req.query;
+        const item = await getByNameService(name);
+        if(!item) throw new Error("Product not found");
+        res.json(item)
+    } catch (error) {
+        next(error);
+    }
+};
+
+
+
 
 export const getAggregation1Controller = async (req, res, next ) => {
     try {

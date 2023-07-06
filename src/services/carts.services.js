@@ -1,9 +1,9 @@
-import CartsDaoMongoDB from "../daos/mongodb/messages.dao.js";
-const cartsDaoMongo = new CartsDaoMongoDB();
+import CartsDaoMongoDB from "../daos/mongodb/carts.dao.js";
+const cartDaoMongo = new CartsDaoMongoDB();
 
 export const getAllService = async () => {
     try {
-        const docs = await cartsDaoMongo.getAllCarts();
+        const docs = await cartDaoMongo.getAllCarts();
         return docs;
     } catch (error) {
         console.log(error);
@@ -11,7 +11,7 @@ export const getAllService = async () => {
 };
 export const getByIdService = async (id) => {
     try {
-        const doc = await cartsDaoMongo.getCartsById(id);
+        const doc = await cartDaoMongo.getCartsById(id);
         if(!doc) throw new Error('Message not found')
         else return doc;
     } catch (error) {
@@ -19,11 +19,22 @@ export const getByIdService = async (id) => {
     }
 };
 
+export const addCartsToService = async (productId, cartId) => {
+    try {
+        const exists = await cartDaoMongo.getCartsById(cartId)
+        const newCart = await cartDaoMongo.addCartsToProduct(productId, cartId);
+        if(!exists) throw new Error('Cart not found!')
+        else return newCart;
+    } catch (error) {
+        console.log(error)
+    }
+};
+
 export const createService = async (obj) => {
     try {
-        const newCarts = await cartsDaoMongo.createCarts(obj);
-        if(!newCarts) throw new Error('Validation Error!')
-        else return newCarts;
+        const newCart = await cartDaoMongo.createCarts(obj);
+        if(!newCart) throw new Error('Validation Error!')
+        else return newCart;
     } catch (error) {
         console.log(error);
     }
@@ -31,7 +42,7 @@ export const createService = async (obj) => {
 
 export const updateService = async (id , obj) => {
     try {
-        const doc = await cartsDaoMongo.getCartsById(id);
+        const doc = await cartDaoMongo.getCartsById(id);
         if(!doc){
             throw new Error('Message not found')
         } else{
@@ -46,7 +57,7 @@ export const updateService = async (id , obj) => {
 
 export const deleteService = async (id) => {
     try {
-        const msgDel = await cartsDaoMongo.deleteCarts(id);
+        const msgDel = await cartDaoMongo.deleteCarts(id);
         return msgDel;
     } catch (error) {
         console.log(error);
